@@ -16,19 +16,30 @@ This project is a simple Flask application packaged and run inside a Docker cont
 - templates/index.html: Homepage template
 - Dockerfile: The recommended and optimal version for this project
 - .Dockerfile: An older version with some inefficiencies
+- ..Dockerfile: A third version with a different setup and a Docker syntax issue
 
 ## 🐳 Dockerfile Explanation
 
-This project contains more than one Dockerfile version:
+This project contains three Dockerfile versions:
 
-### 1. Older Version (.Dockerfile)
-- Based on Ubuntu
-- Installs Python and pip manually
-- Clones the project inside the container
-- Less efficient and harder to maintain
-- Useful for understanding the evolution of Docker images
+### 1. Oldest Version (.Dockerfile)
+- This file is an older and basic Docker setup
+- It starts from Ubuntu instead of a Python-specific base image
+- It installs Python and pip manually inside the container
+- It configures Git globally and then clones the project from GitHub
+- It is more complex and less clean than the main Dockerfile
+- It is useful for learning how Docker evolved, but it is not the best choice for a simple app like this
+- Main issue: it is heavier, slower to build, and less practical for real-world use
 
-### 2. Recommended Version (Dockerfile)
+### 2. Second Version (..Dockerfile)
+- This version uses Python 3.13 slim instead of Ubuntu
+- It still runs apt update and upgrade, but it does not install pip correctly
+- It copies requirements.txt and then attempts `pip install requirements.txt` instead of `pip install -r requirements.txt`
+- It copies the whole project into `/app` afterward
+- It is closer to a correct image, but the pip install command is wrong and will fail
+- This file is useful as an intermediate example, but it is not fully correct
+
+### 3. Recommended Version (Dockerfile)
 - Uses the Python slim base image
 - Creates a smaller and lighter image
 - Copies requirements first and installs dependencies
